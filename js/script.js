@@ -7,7 +7,7 @@ delAll = document.querySelector(".delAll");
 
 delAll.onclick = function () {
     listItem.innerHTML = '';
-}
+};
 
 add.onclick = function one1 () {
     newDo = input.value;
