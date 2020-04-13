@@ -9,17 +9,25 @@ delAll.onclick = function () {
     listItem.innerHTML = '';
 }
 
-add.onclick = function one1 () {
-    newDo = input.value;
-    listItem.insertAdjacentHTML("beforeend", "<li class='hide'><div><div class='work'><span>" + newDo + "</span><button class='deleteOne'>X</button><input type='text' class='inputEdit'><button class='edit'>edit</button></div><div class=\"check\"><img src=\"img/done.png\" alt=\"\" class=\"done\"></div></div></li>");
-    input.value = "";
-    delID = document.querySelectorAll(".deleteOne");
-    editID = document.querySelectorAll(".edit");
-    inputID = document.querySelectorAll(".inputEdit");
-    done = document.querySelectorAll(".check");
-    imgShow = document.querySelectorAll(".done");
-    two ();
+    function one1 () {
+        newDo = input.value;
+        listItem.insertAdjacentHTML("beforeend", "<li class='hide'><div><div class='work'><span>" + newDo + "</span><button class='deleteOne'>X</button><input type='text' class='inputEdit'><button class='edit'>edit</button></div><div class=\"check\"><img src=\"img/done.png\" alt=\"\" class=\"done\"></div></div></li>");
+        input.value = "";
+        delID = document.querySelectorAll(".deleteOne");
+        editID = document.querySelectorAll(".edit");
+        inputID = document.querySelectorAll(".inputEdit");
+        done = document.querySelectorAll(".check");
+        imgShow = document.querySelectorAll(".done");
+        two ();
 
+}
+add.addEventListener("click", one1);
+input.addEventListener("keydown", one2);
+
+function one2 (event) {
+    if (event.key === "Enter") {
+        one1 ()
+    }
 }
 
 function two () {
