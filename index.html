@@ -9,21 +9,24 @@
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
+<header>
+    <h1>Список завдань:</h1>
+</header>
     <div class="container">
         <div class="inp">
-            <input type="text" class="input" >
-            <button class="add">+ADD</button>
-            <button class="delAll">Del ALL</button>
+            <input type="text" class="input" id="input">
+            <button class="add" id="add">додати</button>
+            <button class="delAll" id="delAll">Видалити всі</button>
         </div>
         <div class="">
-            <ul class="list">
+            <ul class="list" id="list">
 
             </ul>
         </div>
         <div class="doneOrNot">
-            <button class="delAll" id="showAll">Show ALL</button>
-            <button class="delAll" id="showDoned">Show Doned</button>
-            <button class="delAll" id="showNext">Show Next</button>
+            <button class="filters" id="showAll">Show ALL</button>
+            <button class="filters" id="showDone">Show Done</button>
+            <button class="filters" id="showNext">Show Next</button>
         </div>
     </div>
     <script src="js/script.js"></script>

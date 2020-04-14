@@ -1,83 +1,123 @@
-let input, add, newDo, listItem, delID, editID, inputID, delAll, done, imgShow;
+const inputMain = document.getElementById("input"); // Головний input
+const addButton = document.getElementById("add"); // Кнопка додати
+const listItems = document.getElementById("list"); // Список завдань ul
+const delAll = document.getElementById("delAll"); // Кнопка видалити всі задачі
+const allElementsLi = document.getElementsByTagName("li"); //масив конкретних (доданих) завдань li
 
-add = document.querySelector(".add");
-input = document.querySelector(".input");
-listItem = document.querySelector(".list");
-delAll = document.querySelector(".delAll");
+inputMain.addEventListener("keydown", enter);
+addButton.addEventListener("click", addButtonClick);
 
 delAll.onclick = function () {
-    listItem.innerHTML = '';
+    listItems.innerHTML = '';
 };
 
-    function one1 () {
-        newDo = input.value;
-        listItem.insertAdjacentHTML("beforeend", "<li class='hide'><div><div class='work'><span>" + newDo + "</span><button class='deleteOne'>X</button><input type='text' class='inputEdit'><button class='edit'>edit</button></div><div class=\"check\"><img src=\"img/done.png\" alt=\"\" class=\"done\"></div></div></li>");
-        input.value = "";
-        delID = document.querySelectorAll(".deleteOne");
-        editID = document.querySelectorAll(".edit");
-        inputID = document.querySelectorAll(".inputEdit");
-        done = document.querySelectorAll(".check");
-        imgShow = document.querySelectorAll(".done");
-        two ();
-
-}
-add.addEventListener("click", one1);
-input.addEventListener("keydown", one2);
-
-function one2 (event) {
+function enter (event) {
     if (event.key === "Enter") {
-        one1 ()
+        addButtonClick ()
     }
-}
+};
 
-function two () {
-    for (let i=0; i<delID.length; i++) {
-        delID[i].onclick = function () {
-            this.parentElement.parentElement.outerHTML = "";
-        }
-        editID[i].onclick = function (event) {
-            console.log(event);
-            this.previousElementSibling.style = "display: block";
-            this.previousElementSibling.value = this.parentElement.firstChild.textContent;
-            this.onclick = function () {
-                console.log(this.parentElement.firstChild);
-                this.parentElement.firstChild.innerHTML = this.previousElementSibling.value;
-                this.previousElementSibling.style = "display: none";
-                two();
+function addButtonClick () {
+        if (inputMain.value !== "") {
+            let id = Math.random()*1e17;
+            listItems.insertAdjacentHTML("beforeend",
+                `<li class='inWork' id="${id}">
+                            <div>
+                                <div class='work'>
+                                    <span id="span">${inputMain.value}</span>
+                                    <button class='deleteOne'>X</button>
+                                    <input type='text' class='inputEdit'>
+                                    <button class='edit'>edit</button>
+                                    <button class="save">save</button>
+                                </div>
+                                <div class="check">
+                                    <img src="img/done.png" class="done" style="display: none">
+                                </div>
+                            </div>
+                       </li>`);
+            inputMain.value = "";
+            inputMain.focus();
+            let elementLi = document.getElementById(id);
+            let deleteOneButton = elementLi.querySelector(".deleteOne");
+
+            deleteOneButton.addEventListener("click", deleteOne);
+
+            function deleteOne() {
+                elementLi.outerHTML = "";
+            }
+            let editButton = elementLi.querySelector(".edit");
+            let saveButton = elementLi.querySelector(".save");
+
+            editButton.addEventListener("click", edit);
+
+            function edit() {
+                elementLi.querySelector(".inputEdit").style = "display: block";
+                editButton.style = "display: none";
+                saveButton.style = "display: block";
+                elementLi.querySelector(".inputEdit").value = elementLi.querySelector("span").textContent;
+                saveButton.addEventListener("click", saveEdit);
+                function saveEdit() {
+                    elementLi.querySelector("span").innerHTML = elementLi.querySelector(".inputEdit").value;
+                    elementLi.querySelector(".inputEdit").style = "display: none";
+                    editButton.style = "";
+                    saveButton.style = "display: none";
+                }
+            }
+            let done = elementLi.querySelector(".check");
+            let imgDone = done.querySelector(".done");
+
+            done.addEventListener("click", showIcon);
+
+            function showIcon () {
+                if (imgDone.style.display == "none") {
+                    imgDone.style = "display: block";
+                    elementLi.classList.add("alreadyDone");
+                    elementLi.classList.remove("inWork");
+                    }
+                else {
+                    imgDone.style = "display: none";
+                    elementLi.classList.add("inWork");
+                    elementLi.classList.remove("alreadyDone");
+                }
             }
         }
-    }
-
-    for (let j=0; j<done.length; j++) {
-        done[j].onclick = function done1 () {
-            this.querySelector(".done").style = "display: block";
-            this.onclick = function () {
-                this.querySelector(".done").style = "display: none";
-                two();
-            }
+        else {
+            return;
         }
-    }
-}
+};
 
-document.querySelector("#showDoned").onclick = function () {
-    for (let p=0; p<imgShow.length; p++) {
-        if (imgShow[p].style.display !== "block") {
-            imgShow[p].parentElement.parentElement.style = "display: none";
+document.getElementById("showDone").addEventListener("click", fShowDone);
+
+function fShowDone () {
+    for (let i =0; i<allElementsLi.length; i++) {
+        allElementsLi[i].style = "display: block";
+    }
+    for (let j =0; j<allElementsLi.length; j++) {
+        if (allElementsLi[j].classList.contains("alreadyDone")) {
+            allElementsLi[j].style = "display: block";
         }
+        else allElementsLi[j].style = "display: none";
     }
-}
+};
 
-document.querySelector("#showAll").onclick = function () {
-    for (let p=0; p<imgShow.length; p++) {
-        imgShow[p].parentElement.parentElement.style = "display: block";
+document.getElementById("showAll").addEventListener("click", fShowAll);
+
+function fShowAll () {
+    for (let i =0; i<allElementsLi.length; i++) {
+        allElementsLi[i].style = "display: block";
     }
-}
+};
 
-document.querySelector("#showNext").onclick = function () {
-    for (let p=0; p<imgShow.length; p++) {
-        if (imgShow[p].style.display === "block") {
-            imgShow[p].parentElement.parentElement.style = "display: none";
+document.getElementById("showNext").addEventListener("click", fShowNext);
+
+function fShowNext () {
+    for (let i =0; i<allElementsLi.length; i++) {
+        allElementsLi[i].style = "display: block";
+    }
+    for (let k =0; k<allElementsLi.length; k++) {
+        if (allElementsLi[k].classList.contains("alreadyDone")) {
+            allElementsLi[k].style = "display: none";
         }
+        else allElementsLi[k].style = "display: block";
     }
-}
-
+};
